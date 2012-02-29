@@ -19,7 +19,7 @@ public class ShareTransaction implements Serializable {
     private String company;    /* company in whom shares are being bought */
     private double amount;      /* # of shares bought, allowing for fractions
                                  * and negative if this was a sale */
-    private long pricePaid;     /* Amount paid for these shares, in cents */
+    private int pricePaid;     /* Amount paid for these shares, in cents */
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date when;          /* Timestamp for when transaction was created */
 
@@ -71,7 +71,7 @@ public class ShareTransaction implements Serializable {
      *
      * @param pricePaid new value of pricePaid
      */
-    public void setPricePaid(long pricePaid) {
+    public void setPricePaid(int pricePaid) {
         this.pricePaid = pricePaid;
     }
 
@@ -99,6 +99,15 @@ public class ShareTransaction implements Serializable {
      */
     public void setCompany(String Company) {
         this.company = Company;
+    }
+
+    public String getTransactionType() {
+        if (this.pricePaid<0) return "Sale";
+        else return "Purchase";
+    }
+
+    public int getTransactionValue() {
+        return Math.abs(this.pricePaid);
     }
 
     @Override

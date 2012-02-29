@@ -16,12 +16,15 @@ public class ShareTransaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;            /* Unique identifier for this transaction */
-    private Company Company;    /* Company in whom shares are being bought */
+    private String company;    /* company in whom shares are being bought */
     private double amount;      /* # of shares bought, allowing for fractions
                                  * and negative if this was a sale */
     private long pricePaid;     /* Amount paid for these shares, in cents */
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date when;          /* Timestamp for when transaction was created */
+
+    public static final String[] COMPANIES =
+    {"Google" , "Apple" , "Oracle" , "Microsoft"};
 
     public ShareTransaction() {
         /* By default, transactions are presumed to be created "now" */
@@ -81,21 +84,21 @@ public class ShareTransaction implements Serializable {
     }
 
     /**
-     * Get the value of Company
+     * Get the value of company
      *
-     * @return the value of Company
+     * @return the value of company
      */
-    public Company getCompany() {
-        return Company;
+    public String getCompany() {
+        return company;
     }
 
     /**
-     * Set the value of Company
+     * Set the value of company
      *
-     * @param Company new value of Company
+     * @param company new value of company
      */
-    public void setCompany(Company Company) {
-        this.Company = Company;
+    public void setCompany(String Company) {
+        this.company = Company;
     }
 
     @Override

@@ -17,12 +17,13 @@ import javax.persistence.Query;
  */
 @Stateless
 public class PortfolioController implements PortfolioControllerLocal {
+    
     @PersistenceContext(unitName = "StockPortfolio-ejbPU")
     private EntityManager em;
     
     @Override
     public List<ShareTransaction> list() {
-        Query query = em.createQuery("select s from ShareTransaction s");
+        Query query = em.createQuery("select s from ShareTransaction s order by s.when ASC");
         return new ArrayList<ShareTransaction>(query.getResultList());
     }
 
@@ -35,6 +36,11 @@ public class PortfolioController implements PortfolioControllerLocal {
     public void delete(ShareTransaction transaction) {
         ShareTransaction managedTransaction = em.merge(transaction);
         em.remove(managedTransaction);
+    }
+
+    public List<ShareTransaction> listForCompany(String name) {
+        Query query = em.createQuery("select s from ShareTransaction s where s.company = :name order by s.when ASC").setParameter("name", name);
+        return new ArrayList<ShareTransaction>(query.getResultList());
     }
 
     

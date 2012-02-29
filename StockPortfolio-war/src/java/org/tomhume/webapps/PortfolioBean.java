@@ -20,10 +20,17 @@ public class PortfolioBean {
     /**
      * Creates a new instance of PortfolioBean
      */
+    
     public PortfolioBean() {
     }
     
     public List<ShareTransaction> getTransactions() {
         return portfolio.list();
     }
+    
+    public List<ShareTransaction> getTransactionsForCompany(String c) {
+        return portfolio.listForCompany(c);
+    }
+    
+
 }

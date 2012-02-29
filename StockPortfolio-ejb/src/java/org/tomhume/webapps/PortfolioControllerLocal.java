@@ -19,5 +19,7 @@ public interface PortfolioControllerLocal {
     void add(ShareTransaction transaction);
 
     void delete(ShareTransaction transaction);
+
+    List<ShareTransaction> listForCompany(String name);
     
 }

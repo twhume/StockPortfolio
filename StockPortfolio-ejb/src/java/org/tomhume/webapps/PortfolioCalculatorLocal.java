@@ -4,6 +4,7 @@
  */
 package org.tomhume.webapps;
 
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -12,5 +13,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface PortfolioCalculatorLocal {
+
+    List<ShareValue> getPortfolioValues();
     
 }

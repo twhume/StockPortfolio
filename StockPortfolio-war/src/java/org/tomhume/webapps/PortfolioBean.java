@@ -17,6 +17,7 @@ import javax.inject.Named;
 @Dependent
 public class PortfolioBean {
     @EJB PortfolioControllerLocal portfolio; 
+    @EJB PortfolioCalculatorLocal calculator;
     /**
      * Creates a new instance of PortfolioBean
      */
@@ -32,5 +33,7 @@ public class PortfolioBean {
         return portfolio.listForCompany(c);
     }
     
-
+    public List<ShareValue> getValues() {
+        return calculator.getPortfolioValues();
+    }
 }

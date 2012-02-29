@@ -29,6 +29,7 @@ public class ShareTransaction implements Serializable {
     public ShareTransaction() {
         /* By default, transactions are presumed to be created "now" */
         when = new Date();
+        
     }
 
     public Date getWhen() {

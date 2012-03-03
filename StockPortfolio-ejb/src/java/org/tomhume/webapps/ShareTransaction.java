@@ -102,15 +102,25 @@ public class ShareTransaction implements Serializable {
         this.company = Company;
     }
 
+    /**
+     * Helper method to determine whether this was a sale or purchase of shares.
+     * @return 
+     */
+    
     public String getTransactionType() {
-        if (this.pricePaid<0) return "Sale";
+        if (this.amount<0) return "Sale";
         else return "Purchase";
     }
 
-    public int getTransactionValue() {
-        return Math.abs(this.pricePaid);
+    /**
+     * Helper method to return the number of shares transacted, whether it was
+     * a purchase or sale this should be positive.
+     * @return 
+     */
+    public double getSharesTransacted() {
+        return Math.abs(this.amount);
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

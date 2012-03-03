@@ -23,7 +23,7 @@ public class PortfolioController implements PortfolioControllerLocal {
     
     @Override
     public List<ShareTransaction> list() {
-        Query query = em.createQuery("select s from ShareTransaction s order by s.when ASC");
+        Query query = em.createQuery("select s from ShareTransaction s order by s.when ASC, s.id ASC");
         return new ArrayList<ShareTransaction>(query.getResultList());
     }
 
@@ -39,7 +39,7 @@ public class PortfolioController implements PortfolioControllerLocal {
     }
 
     public List<ShareTransaction> listForCompany(String name) {
-        Query query = em.createQuery("select s from ShareTransaction s where s.company = :name order by s.when ASC").setParameter("name", name);
+        Query query = em.createQuery("select s from ShareTransaction s where s.company = :name order by s.when ASC, s.id ASC").setParameter("name", name);
         return new ArrayList<ShareTransaction>(query.getResultList());
     }
 

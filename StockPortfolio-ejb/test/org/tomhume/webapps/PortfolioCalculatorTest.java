@@ -4,8 +4,14 @@
  */
 package org.tomhume.webapps;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.naming.NamingException;
 import org.junit.*;
 import static org.junit.Assert.*;
+import uk.ac.susx.inf.ianw.shareManagement.UnknownCompanyException;
 
 /**
  *
@@ -31,9 +37,19 @@ public class PortfolioCalculatorTest {
     @After
     public void tearDown() {
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+
+    @Test
+    public void testReadingFromPortfolio() throws NamingException, RemoteException, NotBoundException, UnknownCompanyException {
+        ShareValue sv = new ShareValue("Microsoft", 2.0);
+        List<ShareValue> sl = new ArrayList<ShareValue>();
+        sl.add(new ShareValue("Microsoft", 2.0));
+        sl.add(new ShareValue("Oracle", 3.0));
+        
+        PortfolioCalculator pc = new PortfolioCalculator();
+        pc.populatePrices(sl);
+        
+        assertTrue(sl.get(0).getValue()>0);
+        assertTrue(sl.get(1).getValue()>0);
+        
+    }
 }

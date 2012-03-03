@@ -8,7 +8,7 @@
     </h:head>
     <h:body>
         <h1>Stock Portfolio</h1>
-        <h:dataTable id="dt1" value="#{portfolio.getTransactionsForCompany('Microsoft')}" var="item" first="0" rules="all">
+        <h:dataTable id="dt1" value="#{portfolio.transactions}" var="item" first="0" rules="all">
             <f:facet name="header">
                 <h:outputText value="Your transactions" />
             </f:facet> 
@@ -57,7 +57,6 @@
             </h:column>
 
         </h:dataTable>
-        
         <h:dataTable id="dt1" value="#{portfolio.values}" var="item" first="0" rules="all">
             <f:facet name="header">
                 <h:outputText value="Your portfolio today" />

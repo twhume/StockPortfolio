@@ -16,6 +16,11 @@ public class ShareValue {
     private String company;
     private double value;
     private double numShares;
+    
+    /* We have a magic value of NOT_SET to indicate that the value of any
+     * given ShareValue hasn't been looked up from the ShareBroker service.
+     */
+    public static final double NOT_SET = -1;
 
     public ShareValue(String c, double n, double v) {
         this.company = c;
@@ -24,7 +29,7 @@ public class ShareValue {
     }
 
     public ShareValue(String c, double n) {
-        this(c, n, 0);
+        this(c, n, NOT_SET);
     }
 
     public String getCompany() {

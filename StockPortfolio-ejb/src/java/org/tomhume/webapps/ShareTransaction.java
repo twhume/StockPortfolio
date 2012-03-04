@@ -32,6 +32,11 @@ public class ShareTransaction implements Serializable {
         
     }
 
+    public ShareTransaction(long id) {
+        this();
+        this.id = id;
+    }
+    
     public Date getWhen() {
         return when;
     }

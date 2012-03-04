@@ -79,7 +79,7 @@ public class PortfolioCalculator implements PortfolioCalculatorLocal {
          */
         
         try {
-            if (System.getSecurityManager() == null) System.setSecurityManager(new RMISecurityManager());
+//            if (System.getSecurityManager() == null) System.setSecurityManager(new RMISecurityManager());
             ShareBroker sb = (ShareBroker) LocateRegistry.getRegistry("localhost", 40090).lookup("rmi:/ShareBroker");
 
             for (ShareValue v: l) {

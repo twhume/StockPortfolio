@@ -12,25 +12,25 @@
         
         <h:form>
             <label>Company</label><br/>
-            <h:selectOneListbox value="#{transaction.company}">
-                <c:forEach items="#{transaction.companies}" var="company">
+            <h:selectOneListbox value="#{portfolio.company}">
+                <c:forEach items="#{portfolio.companies}" var="company">
                     <f:selectItem itemLabel="#{company}" itemValue="#{company}" />  
                 </c:forEach>
             </h:selectOneListbox><br/>
 
             <label>Buy or sell?</label><br/>
-            <h:selectOneRadio value="#{transaction.transactionType}">
+            <h:selectOneRadio value="#{portfolio.transactionType}">
                 <f:selectItem id="buy_radio" itemLabel="Buy" itemValue="Buy" />
                 <f:selectItem id="sell_radio" itemLabel="Sell" itemValue="Sell" />
             </h:selectOneRadio><br/>
             
             <label>How many shares?</label><br/>
-            <h:inputText value="#{transaction.amount}"/><br/>
+            <h:inputText value="#{portfolio.amount}"/><br/>
 
             <label>At what price?</label><br/>
-            <h:inputText value="#{transaction.purchasePrice}"/><br/>
+            <h:inputText value="#{portfolio.purchasePrice}"/><br/>
 
-            <h:commandButton action="#{transaction.save}" value="Transactify!"/>
+            <h:commandButton action="#{portfolio.save}" value="Transactify!"/>
         </h:form>
         
         <h:dataTable id="transactions_table" value="#{portfolio.transactions}" var="item" first="0" rules="all">
@@ -83,8 +83,8 @@
             
             <h:column>
                 <h:form>
-                <h:commandLink action="#{transaction.delete}" value="Delete">
-                    <f:setPropertyActionListener target="#{transaction.id}" value="#{item.id}" />
+                <h:commandLink action="#{portfolio.delete}" value="Delete">
+                    <f:setPropertyActionListener target="#{portfolio.id}" value="#{item.id}" />
                 </h:commandLink>
                 </h:form>
             </h:column>

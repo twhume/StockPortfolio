@@ -6,37 +6,45 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
         <title>Stock Portfolio</title>
+        <link href="${facesContext.externalContext.requestContextPath}/style.css" rel="stylesheet" type="text/css"/>
     </h:head>
     <h:body>
         <h1>Stock Portfolio</h1>
+        <h2>Your portfolio</h2>
         
-        <h:form>
-            <label>Company</label><br/>
-            <h:selectOneListbox value="#{portfolio.company}">
-                <c:forEach items="#{portfolio.companies}" var="company">
-                    <f:selectItem itemLabel="#{company}" itemValue="#{company}" />  
-                </c:forEach>
-            </h:selectOneListbox><br/>
+        <div class="content">
+            <h:dataTable id="portfolio_table" value="#{portfolio.values}" var="item" first="0" rules="all">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Company" />
+                    </f:facet> 
+                    <h:outputText value="#{item.company}" />
+                </h:column>
 
-            <label>Buy or sell?</label><br/>
-            <h:selectOneRadio value="#{portfolio.transactionType}">
-                <f:selectItem id="buy_radio" itemLabel="Buy" itemValue="Buy" />
-                <f:selectItem id="sell_radio" itemLabel="Sell" itemValue="Sell" />
-            </h:selectOneRadio><br/>
-            
-            <label>How many shares?</label><br/>
-            <h:inputText value="#{portfolio.amount}"/><br/>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="# Shares" />
+                    </f:facet> 
+                    <h:outputText value="#{item.numShares}" />
+                </h:column>
 
-            <label>At what price?</label><br/>
-            <h:inputText value="#{portfolio.purchasePrice}"/><br/>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Value" />
+                    </f:facet> 
+                    
+                    <h:outputText value="#{item.value}" rendered="#{item.value > -1}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                    <h:outputText value="Couldn't connect to ShareBroker" rendered="#{item.value == -1}"/>
+                </h:column>
 
-            <h:commandButton action="#{portfolio.save}" value="Transactify!"/>
-        </h:form>
-        
+            </h:dataTable>    
+        </div>
+        <br/>
+
+        <h2>Your transactions</h2>
         <h:dataTable id="transactions_table" value="#{portfolio.transactions}" var="item" first="0" rules="all">
-            <f:facet name="header">
-                <h:outputText value="Your transactions" />
-            </f:facet> 
                 
             <h:column>
                 <f:facet name="header">
@@ -71,7 +79,7 @@
                 <f:facet name="header">
                     <h:outputText value="Payment" />
                 </f:facet> 
-                <h:outputText value="#{item.pricePaid/100}" />
+                $<h:outputText value="#{item.pricePaid/100}" />
             </h:column>
 
             <h:column>
@@ -83,41 +91,27 @@
             
             <h:column>
                 <h:form>
-                <h:commandLink action="#{portfolio.delete}" value="Delete">
+                <h:commandLink action="#{portfolio.delete}" value="[X]">
                     <f:setPropertyActionListener target="#{portfolio.id}" value="#{item.id}" />
                 </h:commandLink>
                 </h:form>
             </h:column>
 
         </h:dataTable>
-        <h:dataTable id="portfolio_table" value="#{portfolio.values}" var="item" first="0" rules="all">
-            <f:facet name="header">
-                <h:outputText value="Your portfolio today" />
-            </f:facet> 
-                
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Company" />
-                </f:facet> 
-                <h:outputText value="#{item.company}" />
-            </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="# Shares" />
-                </f:facet> 
-                <h:outputText value="#{item.numShares}" />
-            </h:column>
+        <div class="form">
+            <h:form>
+                Add to your transactions! <h:selectOneMenu value="#{portfolio.transactionType}">
+                    <f:selectItem id="buy_radio" itemLabel="Buy" itemValue="Buy" />
+                    <f:selectItem id="sell_radio" itemLabel="Sell" itemValue="Sell" />
+                </h:selectOneMenu> <h:inputText value="#{portfolio.amount}" size="5"/> shares in <h:selectOneMenu value="#{portfolio.company}">
+                    <c:forEach items="#{portfolio.companies}" var="company">
+                        <f:selectItem itemLabel="#{company}" itemValue="#{company}" />  
+                    </c:forEach></h:selectOneMenu> at $<h:inputText value="#{portfolio.purchasePrice}" size="5"/> per share <h:commandButton action="#{portfolio.save}" value="Now"/>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Value" />
-                </f:facet> 
-                <h:outputText value="#{item.value}" />
-            </h:column>
+            </h:form>
+        </div>
 
-        </h:dataTable>    
-        
 
             
         

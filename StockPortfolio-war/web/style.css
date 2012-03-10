@@ -1,0 +1,53 @@
+/* 
+    Document   : style
+    Created on : Mar 10, 2012, 4:18:09 PM
+    Author     : twhume
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+h1 {
+    width: 100%;
+    color: white;
+    background-color: black;
+    border: 10px solid black;
+    margin: 0px;
+    padding: 0px;
+    font-size: 24pt;
+}
+
+h2 {
+    width: 100%;
+    color: white;
+    background-color: gray;
+    border: 10px solid gray;
+    margin: 0px;
+    padding: 0px;
+    font-size: 15pt;
+}
+
+body { 
+    font-family: Arial, Helvetica;
+    border: 10px solid white;
+    width: 75%
+}
+
+label {
+    font-weight: bold;
+}
+
+
+table {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+table, th {
+    color: black;
+}
+
+div.form {
+    margin-top: 20px;
+    font-size: 125%;
+}

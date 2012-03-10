@@ -85,12 +85,15 @@ public class PortfolioCalculator implements PortfolioCalculatorLocal {
             for (ShareValue v: l) {
                 if (v.getValue()==ShareValue.NOT_SET) {
                     System.err.println("Looking up " + v.getCompany());
+                    System.err.println("price="+sb.getPrice(v.getCompany()));
                     v.setValue(sb.getPrice(v.getCompany()) * v.getNumShares());
                 }
             }
         } catch (RemoteException n) {
+            System.err.println(n);
             n.printStackTrace();
         } catch (NotBoundException n) {
+            System.err.println(n);
             n.printStackTrace();
         } finally {
             return l;

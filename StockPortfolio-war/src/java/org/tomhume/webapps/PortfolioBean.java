@@ -192,7 +192,7 @@ public class PortfolioBean {
         
         int pricePaid = centsFromDollars(this.purchasePrice);
         
-        st.setPricePaid((int) Math.abs(amountD * pricePaid));
+        st.setPricePaid(pricePaid);
         st.setCompany(this.company);
 
         portfolio.add(st);
@@ -225,7 +225,7 @@ public class PortfolioBean {
             if (res!=null) {
                 ShareTransaction st = new ShareTransaction();
                 st.setAmount(amountD);
-                st.setPricePaid(Math.abs((int)(amountD * res.getPrice()*100)));
+                st.setPricePaid((int)(res.getPrice()*100));
                 st.setCompany(company);
                 portfolio.add(st);
             }

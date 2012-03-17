@@ -23,7 +23,7 @@ import javax.inject.Named;
 @RequestScoped
 public class PortfolioBean {
     @EJB PortfolioControllerLocal portfolio; 
-    @EJB PortfolioCalculatorLocal calculator;
+    @EJB ShareBrokerControllerLocal calculator;
     
     /* Fields used for adding a new ShareTransaction */
     

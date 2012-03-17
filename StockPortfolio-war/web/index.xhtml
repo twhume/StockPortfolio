@@ -41,6 +41,18 @@
 
             </h:dataTable>    
         </div>
+        <div class="form">
+            <h:form>
+                Buy or sell shares! <h:selectOneMenu value="#{shareBroker.transactionType}">
+                    <f:selectItem id="buy_radio" itemLabel="Buy" itemValue="Buy" />
+                    <f:selectItem id="sell_radio" itemLabel="Sell" itemValue="Sell" />
+                </h:selectOneMenu> <h:inputText value="#{shareBroker.amount}" size="5"/> shares in <h:selectOneMenu value="#{shareBroker.company}">
+                    <c:forEach items="#{shareBroker.companies}" var="company">
+                        <f:selectItem itemLabel="#{company}" itemValue="#{company}" />  
+                    </c:forEach></h:selectOneMenu> <h:commandButton action="#{shareBroker.save}" value="Now"/>
+
+            </h:form>
+        </div>
         <br/>
 
         <h2>Your transactions</h2>

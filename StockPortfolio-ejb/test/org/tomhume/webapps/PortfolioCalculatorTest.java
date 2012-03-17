@@ -47,7 +47,7 @@ public class PortfolioCalculatorTest {
 
     public void testMakePurchase() throws RemoteException, NotBoundException, KeyStoreException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, InvalidKeyException, SignatureException, InvalidRequestException {
 
-        // Register with the ShareBroker
+        // Register with the ShareBrokerController
         
         InputStream is = getClass().getResourceAsStream("/keystore.jks");
         KeyStore ks = KeyStore.getInstance("JKS");
@@ -125,7 +125,7 @@ public class PortfolioCalculatorTest {
         KeyStore ks = KeyStore.getInstance("JKS");
         ks.load(is, null);
 
-        /* Create a PurchaseRequest, sign it with our private key, and send it to the ShareBroker */
+        /* Create a PurchaseRequest, sign it with our private key, and send it to the ShareBrokerController */
         
         ShareBroker sb = (ShareBroker) LocateRegistry.getRegistry("localhost", 40090).lookup("ShareBroker");
         PurchaseRequest req = new PurchaseRequest(CUSTOMER_ID, System.currentTimeMillis(), stock, amount);
@@ -188,7 +188,7 @@ public class PortfolioCalculatorTest {
         sl.add(new ShareValue("Microsoft", 2.0));
         sl.add(new ShareValue("Oracle", 3.0));
         
-        PortfolioCalculator pc = new PortfolioCalculator();
+        ShareBrokerController pc = new ShareBrokerController();
         pc.populatePrices(sl);
         
         assertTrue(sl.get(0).getValue()>0);

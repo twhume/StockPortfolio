@@ -137,7 +137,13 @@ public class ShareBrokerController implements ShareBrokerControllerLocal {
         Query query = em.createQuery("select s.company, sum(s.amount) FROM ShareTransaction s group by s.company");
         List<Object[]> results = query.getResultList();
         for(Object[] o: results) {
-            values.add(new ShareValue((String) o[0], (Double) o[1]));
+            
+            /* If we have purchased and then sold shares such that the total number of shares owned is zero,
+             * don't include this company in our portfolio
+             */
+            
+            Double amount = (Double) o[1];
+            if (amount!=0) values.add(new ShareValue((String) o[0], (Double) o[1]));
         }
         
         /* Populate that list using share prices looked up from the service */

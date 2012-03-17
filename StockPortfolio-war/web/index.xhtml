@@ -43,13 +43,13 @@
         </div>
         <div class="form">
             <h:form>
-                Buy or sell shares! <h:selectOneMenu value="#{shareBroker.transactionType}">
+                Buy or sell shares! <h:selectOneMenu value="#{portfolio.transactionType}">
                     <f:selectItem id="buy_radio" itemLabel="Buy" itemValue="Buy" />
                     <f:selectItem id="sell_radio" itemLabel="Sell" itemValue="Sell" />
-                </h:selectOneMenu> <h:inputText value="#{shareBroker.amount}" size="5"/> shares in <h:selectOneMenu value="#{shareBroker.company}">
-                    <c:forEach items="#{shareBroker.companies}" var="company">
+                </h:selectOneMenu> <h:inputText value="#{portfolio.amount}" size="5"/> shares in <h:selectOneMenu value="#{portfolio.company}">
+                    <c:forEach items="#{portfolio.companies}" var="company">
                         <f:selectItem itemLabel="#{company}" itemValue="#{company}" />  
-                    </c:forEach></h:selectOneMenu> <h:commandButton action="#{shareBroker.save}" value="Now"/>
+                    </c:forEach></h:selectOneMenu> <h:commandButton action="#{portfolio.makePurchaseRequest}" value="Now"/>
 
             </h:form>
         </div>
@@ -91,7 +91,9 @@
                 <f:facet name="header">
                     <h:outputText value="Payment" />
                 </f:facet> 
-                $<h:outputText value="#{item.pricePaid/100}" />
+                <h:outputText value="#{item.pricePaid/100}">
+                    <f:convertNumber type="currency"/>
+                </h:outputText> 
             </h:column>
 
             <h:column>
@@ -119,7 +121,7 @@
                 </h:selectOneMenu> <h:inputText value="#{portfolio.amount}" size="5"/> shares in <h:selectOneMenu value="#{portfolio.company}">
                     <c:forEach items="#{portfolio.companies}" var="company">
                         <f:selectItem itemLabel="#{company}" itemValue="#{company}" />  
-                    </c:forEach></h:selectOneMenu> at $<h:inputText value="#{portfolio.purchasePrice}" size="5"/> per share <h:commandButton action="#{portfolio.save}" value="Now"/>
+                    </c:forEach></h:selectOneMenu> at $<h:inputText value="#{portfolio.purchasePrice}" size="5"/> per share <h:commandButton action="#{portfolio.saveTransaction}" value="Now"/>
 
             </h:form>
         </div>

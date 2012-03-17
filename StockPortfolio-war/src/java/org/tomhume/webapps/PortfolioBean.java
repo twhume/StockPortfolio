@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import uk.ac.susx.inf.ianw.shareManagement.PurchaseResult;
 
 /**
  *
@@ -23,7 +24,7 @@ import javax.inject.Named;
 @RequestScoped
 public class PortfolioBean {
     @EJB PortfolioControllerLocal portfolio; 
-    @EJB ShareBrokerControllerLocal calculator;
+    @EJB ShareBrokerControllerLocal broker;
     
     /* Fields used for adding a new ShareTransaction */
     
@@ -86,7 +87,7 @@ public class PortfolioBean {
      */
 
     public List<ShareValue> getValues() {
-        if (svList==null) svList = calculator.getPortfolioValues();
+        if (svList==null) svList = broker.getPortfolioValues();
         return svList;
     }
     
@@ -175,19 +176,66 @@ public class PortfolioBean {
      * @return 
      */
 
-    public String save() {
-        double amount = Double.parseDouble(this.amount);
-        if (this.transactionType.equalsIgnoreCase("Sell")) amount = amount * -1;
+    public String saveTransaction() {
+        double amountD = Double.parseDouble(this.amount);
+        if (transactionType.equalsIgnoreCase("Sell")) amountD = amountD * -1;
+
+        /* Trying to sell more than we own? Drop the transaction */
+        
+        if (!isValidTransaction(company, amountD)) {
+            cleanParameters();
+            return "index";
+        }
 
         ShareTransaction st = new ShareTransaction();
-        st.setAmount(amount);
+        st.setAmount(amountD);
         
         int pricePaid = centsFromDollars(this.purchasePrice);
         
-        st.setPricePaid(pricePaid);
+        st.setPricePaid((int) Math.abs(amountD * pricePaid));
         st.setCompany(this.company);
 
         portfolio.add(st);
+        invalidateCache();
+        cleanParameters();
+        return "index";
+    }
+    
+    /**
+     * The other sort of action we can trigger is a full PurchaseRequest: where
+     * we go to the ShareBroker, request a sale, get back details of the price
+     * paid, and save these details as a new ShareTransaction.
+     * 
+     * @return 
+     */
+    
+    public String makePurchaseRequest() {
+        double amountD = Double.parseDouble(this.amount);
+        if (transactionType.equalsIgnoreCase("Sell")) amountD = amountD * -1;
+
+        /* Trying to sell more than we own? Drop the transaction */
+
+        if (!isValidTransaction(company, amountD)) {
+            cleanParameters();
+            return "index";
+        }
+
+        try {
+            PurchaseResult res = broker.makePurchase(company, amountD);
+            if (res!=null) {
+                ShareTransaction st = new ShareTransaction();
+                st.setAmount(amountD);
+                st.setPricePaid(Math.abs((int)(amountD * res.getPrice()*100)));
+                st.setCompany(company);
+                portfolio.add(st);
+            }
+        } catch (Exception e) {
+            /* Generally it's bad practice to catch Exception, but there's so many it 
+             * could be and I don't think we should be floating messages about
+             * KeyStores or RemoteExceptions to the UI
+             */
+            e.printStackTrace();
+        }
         invalidateCache();
         cleanParameters();
         return "index";
@@ -222,5 +270,37 @@ public class PortfolioBean {
         System.err.println("Have " + fields.length + " from " +p);
         //TODO add proper error handling here
         return (Integer.parseInt(fields[0])*100) + Integer.parseInt(fields[1]);
+    }
+    
+    /**
+     * Checks whether the proposed share transaction is valid; in particular,
+     * looks to see that we are not trying to sell more shares than we currently
+     * own.
+     * 
+     * Out of respect for the beauty of free market economics, the author has
+     * placed no limit on how many shares can be purchased.
+     * 
+     * @param company   Company in which we are buying/selling shares
+     * @param amount    Quantity of shares we are trying to buy/sell
+     * @return 
+     */
+    
+    private boolean isValidTransaction(String company, double amount) {
+        
+        /* We can purchase any amount */
+        if (amount>=0) return true;
+        
+        /* Tot up how many shares we own in this company, by adding all sales
+         * and purchases. We could go back to the database for this, but we
+         * will likely have the data cached locally; so let's avoid that now.
+         */
+        List<ShareTransaction> shares = getTransactionsForCompany(company);
+        double sharesHeld = 0;
+        for (ShareTransaction t: shares) {
+            sharesHeld += t.getAmount();
+        }
+
+        if (sharesHeld>= (amount * -1)) return true;
+        return false;
     }
 }

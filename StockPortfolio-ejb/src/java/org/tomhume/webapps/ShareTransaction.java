@@ -125,30 +125,43 @@ public class ShareTransaction implements Serializable {
     public double getSharesTransacted() {
         return Math.abs(this.amount);
     }
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (int) id;
-        return hash;
-    }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ShareTransaction)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        ShareTransaction other = (ShareTransaction) object;
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ShareTransaction other = (ShareTransaction) obj;
         if (this.id != other.id) {
+            return false;
+        }
+        if ((this.company == null) ? (other.company != null) : !this.company.equals(other.company)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.amount) != Double.doubleToLongBits(other.amount)) {
+            return false;
+        }
+        if (this.pricePaid != other.pricePaid) {
+            return false;
+        }
+        if (this.when != other.when && (this.when == null || !this.when.equals(other.when))) {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString() {
-        return "org.tomhume.webapps.ShareTransaction[ id=" + id + " ]";
+    public int hashCode() {
+        int hash = 5;
+        hash = 37 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 37 * hash + (this.company != null ? this.company.hashCode() : 0);
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.amount) ^ (Double.doubleToLongBits(this.amount) >>> 32));
+        hash = 37 * hash + this.pricePaid;
+        hash = 37 * hash + (this.when != null ? this.when.hashCode() : 0);
+        return hash;
     }
     
 }

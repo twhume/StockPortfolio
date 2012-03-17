@@ -45,6 +45,7 @@ public class ShareBrokerController implements ShareBrokerControllerLocal {
      * if all went well.
      */
     
+    @Override
     public PurchaseResult makePurchase(String company, double amount)  throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, RemoteException, NotBoundException, UnrecoverableKeyException, InvalidKeyException, SignatureException, InvalidRequestException {
 
         /* Load the keystore */
@@ -59,8 +60,7 @@ public class ShareBrokerController implements ShareBrokerControllerLocal {
         PurchaseRequest req = new PurchaseRequest(CUSTOMER_ID, System.currentTimeMillis(), company, amount);
         req.setSignature(null);
 
-        Key key = ks.getKey("selfsigned", PASSWORD.toCharArray());
-        PrivateKey privateKey = (PrivateKey) key;
+        PrivateKey privateKey = (PrivateKey) ks.getKey("selfsigned", PASSWORD.toCharArray());
         
         Signature signature = Signature.getInstance("SHA1withDSA");
         byte[] objBytes = objectToBytes(req);
@@ -182,8 +182,6 @@ public class ShareBrokerController implements ShareBrokerControllerLocal {
 
             for (ShareValue v: l) {
                 if (v.getValue()==ShareValue.NOT_SET) {
-                    System.err.println("Looking up " + v.getCompany());
-                    System.err.println("price="+sb.getPrice(v.getCompany()));
                     v.setValue(sb.getPrice(v.getCompany()) * v.getNumShares());
                 }
             }

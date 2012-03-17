@@ -34,7 +34,6 @@ public class PortfolioController implements PortfolioControllerLocal {
 
     @Override
     public void delete(ShareTransaction transaction) {
-        System.err.println("Deleting transaction " + transaction);
         ShareTransaction managedTransaction = em.merge(transaction);
         em.remove(managedTransaction);
     }
